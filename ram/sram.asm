@@ -11,7 +11,10 @@ sHallOfFame:: ds HOF_TEAM * HOF_TEAM_CAPACITY
 
 SECTION "Save Data", SRAM
 
-	ds $598
+	ds $596
+
+sRecievedMewFlag:: db
+sRecievedMewFlagBackup:: db
 
 sGameData::
 sPlayerName::  ds NAME_LENGTH

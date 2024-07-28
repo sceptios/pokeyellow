@@ -24,6 +24,7 @@ LoadSAV:
 	res 6, [hl]
 	ld a, $1 ; bad checksum
 .goodsum
+	call RestoreRecievedMewFlag
 	ld [wSaveFileStatus], a
 	ret
 
@@ -263,6 +264,7 @@ SaveSAVtoSRAM2:
 	call SAVCheckSum
 	ld [sMainDataCheckSum], a
 	call DisableSRAM
+	call BackupRecievedMewFlag
 	ret
 
 SaveSAVtoSRAM::
@@ -682,4 +684,32 @@ DisableSRAM:
 	ld a, SRAM_DISABLE
 	ld [MBC1SRamBankingMode], a
 	ld [MBC1SRamEnable], a
+	ret
+
+BackupRecievedMewFlag:
+	push af
+	ld a, BANK(sRecievedMewFlag)
+	call OpenSRAM
+	ld a, [sRecievedMewFlag]
+	push af
+	ld a, BANK(sRecievedMewFlagBackup)
+	call OpenSRAM
+	pop af
+	ld [sRecievedMewFlagBackup], a
+	call CloseSRAM
+	pop af
+	ret
+
+RestoreRecievedMewFlag:
+	push af
+	ld a, BANK(sRecievedMewFlagBackup)
+	call OpenSRAM
+	ld a, [sRecievedMewFlagBackup]
+	push af
+	ld a, BANK(sRecievedMewFlag)
+	call OpenSRAM
+	pop af
+	ld [sRecievedMewFlag], a
+	call CloseSRAM
+	pop af
 	ret

@@ -131,6 +131,27 @@ CeladonMansion3FGameDesignerText:
 	ld hl, .CompletedDexText
 	call PrintText
 	call Delay3
+
+	ld a, BANK(sRecievedMewFlag)
+	call OpenSRAM
+	ld a, [sRecievedMewFlag]
+	call CloseSRAM
+	cp a, MEW_RECIEVED
+	jr z, .skipMewGift
+
+	lb bc, MEW, 5
+	call GivePokemon
+	jr nc, .skipMewGift
+	ld a, [wAddedToParty]
+	and a
+	call z, WaitForTextScrollButtonPress
+
+	ld a, BANK(sRecievedMewFlag)
+	call OpenSRAM
+	ld a, MEW_RECIEVED
+	ld [sRecievedMewFlag], a
+	call CloseSRAM
+.skipMewGift
 	xor a
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
 	ld hl, .UnlockedDiplomaPrinting
