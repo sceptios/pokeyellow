@@ -39,6 +39,11 @@ _AddPartyMon::
 	ld e, l
 	ld hl, wPlayerName
 	ld bc, NAME_LENGTH
+	ld a, [wcf91]
+	cp MEW
+	jr nz, .notMew
+	ld hl, GFName
+.notMew
 	call CopyData
 	ld a, [wMonDataLocation]
 	and a
@@ -47,9 +52,22 @@ _AddPartyMon::
 	ldh a, [hNewPartyLength]
 	dec a
 	call SkipFixedLengthTextEntries
+	ld a, [wcf91]
+	cp MEW
+	jr z, .isMew
 	ld a, NAME_MON_SCREEN
 	ld [wNamingScreenType], a
 	predef AskName
+	jr .skipNaming
+.isMew
+	push hl
+	ld a, [wcf91]
+	ld [wd11e], a
+	call GetMonName
+	ld hl, wcd6d
+	pop de
+	ld bc, NAME_LENGTH
+	call CopyData
 .skipNaming
 	ld hl, wPartyMons
 	ld a, [wMonDataLocation]
@@ -111,9 +129,16 @@ _AddPartyMon::
 	jr nz, .copyEnemyMonData
 
 ; Not wild.
+	ld a, [wcf91]
+	cp MEW
+	jr z, .MewIVs
 	call Random ; generate random IVs
 	ld b, a
 	call Random
+	jr .next4
+.MewIVs
+    ld a, $FF ; Mew gets fixed perfect IVs
+	ld b, $FF
 
 .next4
 	push bc
@@ -198,12 +223,25 @@ _AddPartyMon::
 	ld [wLearningMovesFromDayCare], a
 	predef WriteMonMoves
 	pop de
+
+    ld a, [wcf91]
+	cp MEW
+	jr z, .mewID
 	ld a, [wPlayerID]  ; set trainer ID to player ID
 	inc de
 	ld [de], a
 	ld a, [wPlayerID + 1]
 	inc de
 	ld [de], a
+	jr .endID
+.mewID
+	ld a, $59
+	inc de
+	ld [de], a
+	ld a, $0C
+	inc de
+	ld [de], a
+.endID
 	push de
 	ld a, [wCurEnemyLVL]
 	ld d, a

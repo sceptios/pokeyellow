@@ -6314,6 +6314,12 @@ LoadEnemyMonData:
 	ld a, ATKDEFDV_TRAINER
 	ld b, SPDSPCDV_TRAINER
 	jr z, .storeDVs
+; perfect DVs for Mew
+	ld a, [wEnemyMonSpecies2]
+	cp MEW
+	ld a, $FF
+	ld b, $FF
+	jr z, .storeDVs
 ; random DVs for wild mon
 	call BattleRandom
 	ld b, a

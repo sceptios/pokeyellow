@@ -3009,10 +3009,14 @@ SendNewMonToBox:
 	dec b
 	jr nz, .loop3
 .skip2
+	ld a, [wcf91]
+	cp MEW
+	jr z, .skipNaming
 	ld hl, wBoxMonNicks
 	ld a, NAME_MON_SCREEN
 	ld [wNamingScreenType], a
 	predef AskName
+.skipNaming
 	ld a, [wBoxCount]
 	dec a
 	jr z, .skip3
@@ -3097,6 +3101,27 @@ SendNewMonToBox:
 	ld a, TWISTEDSPOON_GSC
 	ld [wBoxMon1CatchRate], a
 .notKadabra
+	ld a, [wcf91]
+	cp MEW
+	jr nz, .notMew
+
+	ld [wd11e], a
+	call GetMonName
+	ld hl, wcd6d
+	ld bc, NAME_LENGTH
+	ld de, wBoxMon1Nick
+	call CopyData
+
+	ld bc, NAME_LENGTH
+	ld hl, GFName
+	ld de, wBoxMon1OT
+	call CopyData
+
+	ld a, $59
+	ld [wBoxMon1OTID], a
+	ld a, $0C
+	ld [wBoxMon1OTID+1], a
+.notMew
 	ret
 
 ; checks if the tile in front of the player is a shore or water tile
