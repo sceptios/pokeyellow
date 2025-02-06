@@ -690,10 +690,6 @@ BackupRecievedMewFlag:
 	ld a, BANK(sRecievedMewFlag)
 	call OpenSRAM
 	ld a, [sRecievedMewFlag]
-	push af
-	ld a, BANK(sRecievedMewFlagBackup)
-	call OpenSRAM
-	pop af
 	ld [sRecievedMewFlagBackup], a
 	call CloseSRAM
 	pop af
@@ -704,10 +700,6 @@ RestoreRecievedMewFlag:
 	ld a, BANK(sRecievedMewFlagBackup)
 	call OpenSRAM
 	ld a, [sRecievedMewFlagBackup]
-	push af
-	ld a, BANK(sRecievedMewFlag)
-	call OpenSRAM
-	pop af
 	ld [sRecievedMewFlag], a
 	call CloseSRAM
 	pop af
