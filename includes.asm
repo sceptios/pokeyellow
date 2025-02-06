@@ -17,6 +17,7 @@ INCLUDE "macros/scripts/gfx_anims.asm"
 INCLUDE "constants/charmap.asm"
 INCLUDE "constants/hardware_constants.asm"
 INCLUDE "constants/oam_constants.asm"
+INCLUDE "constants/ram_constants.asm"
 INCLUDE "constants/misc_constants.asm"
 INCLUDE "constants/gfx_constants.asm"
 INCLUDE "constants/input_constants.asm"
@@ -52,3 +53,7 @@ INCLUDE "constants/text_constants.asm"
 INCLUDE "constants/menu_constants.asm"
 INCLUDE "constants/sprite_anim_constants.asm"
 INCLUDE "constants/pikachu_emotion_constants.asm"
+
+IF DEF(_YELLOW_VC)
+INCLUDE "vc/pokeyellow.constants.asm"
+ENDC

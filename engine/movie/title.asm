@@ -11,9 +11,11 @@ PrepareTitleScreen::
 	xor a
 	ldh [hWY], a
 	ld [wLetterPrintingDelayFlags], a
-	ld hl, wd732
+	ld hl, wStatusFlags6
 	ld [hli], a
+	ASSERT wStatusFlags6 + 1 == wStatusFlags7
 	ld [hli], a
+	ASSERT wStatusFlags7 + 1 == wElite4Flags
 	ld [hl], a
 	ld a, BANK(Music_TitleScreen)
 	ld [wAudioROMBank], a
@@ -74,7 +76,7 @@ DisplayTitleScreen:
 	call GBPalNormal
 	ld a, %11100000
 	ldh [rOBP0], a
-	call UpdateGBCPal_OBP0
+	call UpdateCGBPal_OBP0
 
 ; make pokemon logo bounce up and down
 	ld bc, hSCY ; background scroll Y
@@ -152,7 +154,7 @@ DisplayTitleScreen:
 	call PlaySound
 .loop
 	xor a
-	ld [wUnusedCC5B], a
+	ld [wUnusedFlag], a
 	ld [wTitleScreenScene], a
 	ld [wTitleScreenScene + 1], a
 	ld [wTitleScreenScene + 2], a
