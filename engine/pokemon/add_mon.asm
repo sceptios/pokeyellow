@@ -39,7 +39,7 @@ _AddPartyMon::
 	ld e, l
 	ld hl, wPlayerName
 	ld bc, NAME_LENGTH
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	cp MEW
 	jr nz, .notMew
 	ld hl, GFName
@@ -52,7 +52,7 @@ _AddPartyMon::
 	ldh a, [hNewPartyLength]
 	dec a
 	call SkipFixedLengthTextEntries
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	cp MEW
 	jr z, .isMew
 	ld a, NAME_MON_SCREEN
@@ -61,10 +61,10 @@ _AddPartyMon::
 	jr .skipNaming
 .isMew
 	push hl
-	ld a, [wcf91]
-	ld [wd11e], a
+	ld a, [wCurPartySpecies]
+	ld [wNamedObjectIndex], a
 	call GetMonName
-	ld hl, wcd6d
+	ld hl, wNameBuffer
 	pop de
 	ld bc, NAME_LENGTH
 	call CopyData
@@ -129,7 +129,7 @@ _AddPartyMon::
 	jr nz, .copyEnemyMonData
 
 ; Not wild.
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	cp MEW
 	jr z, .MewIVs
 	call Random ; generate random IVs
@@ -224,7 +224,7 @@ _AddPartyMon::
 	predef WriteMonMoves
 	pop de
 
-    ld a, [wcf91]
+    ld a, [wCurPartySpecies]
 	cp MEW
 	jr z, .mewID
 	ld a, [wPlayerID]  ; set trainer ID to player ID
@@ -558,3 +558,4 @@ _MoveMon::
 .done
 	and a
 	ret
+	

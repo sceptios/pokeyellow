@@ -3010,7 +3010,7 @@ SendNewMonToBox:
 	dec b
 	jr nz, .loop3
 .skip2
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	cp MEW
 	jr z, .skipNaming
 	ld hl, wBoxMonNicks
@@ -3102,13 +3102,13 @@ SendNewMonToBox:
 	ld a, TWISTEDSPOON_GSC
 	ld [wBoxMon1CatchRate], a
 .notKadabra
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	cp MEW
 	jr nz, .notMew
 
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	call GetMonName
-	ld hl, wcd6d
+	ld hl, wNameBuffer
 	ld bc, NAME_LENGTH
 	ld de, wBoxMon1Nick
 	call CopyData
