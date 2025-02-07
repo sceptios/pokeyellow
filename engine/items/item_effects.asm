@@ -3010,8 +3010,8 @@ SendNewMonToBox:
 	dec b
 	jr nz, .loop3
 .skip2
-	ld a, [wCurPartySpecies]
-	cp MEW
+	ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
 	jr z, .skipNaming
 	ld hl, wBoxMonNicks
 	ld a, NAME_MON_SCREEN
@@ -3102,10 +3102,11 @@ SendNewMonToBox:
 	ld a, TWISTEDSPOON_GSC
 	ld [wBoxMon1CatchRate], a
 .notKadabra
-	ld a, [wCurPartySpecies]
-	cp MEW
-	jr nz, .notMew
+	ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
+	jr nz, .notGiftMew
 
+	ld a, [wCurPartySpecies]
 	ld [wNamedObjectIndex], a
 	call GetMonName
 	ld hl, wNameBuffer
@@ -3122,7 +3123,7 @@ SendNewMonToBox:
 	ld [wBoxMon1OTID], a
 	ld a, $0C
 	ld [wBoxMon1OTID+1], a
-.notMew
+.notGiftMew
 	ret
 
 ; checks if the tile in front of the player is a shore or water tile

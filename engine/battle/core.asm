@@ -6317,9 +6317,9 @@ LoadEnemyMonData:
 	ld a, ATKDEFDV_TRAINER
 	ld b, SPDSPCDV_TRAINER
 	jr z, .storeDVs
-; perfect DVs for Mew
-	ld a, [wEnemyMonSpecies2]
-	cp MEW
+; perfect DVs for gift Mew
+	ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
 	ld a, $FF
 	ld b, $FF
 	jr z, .storeDVs

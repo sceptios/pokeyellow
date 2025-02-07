@@ -39,11 +39,11 @@ _AddPartyMon::
 	ld e, l
 	ld hl, wPlayerName
 	ld bc, NAME_LENGTH
-	ld a, [wCurPartySpecies]
-	cp MEW
-	jr nz, .notMew
+	ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
+	jr nz, .notGiftMew
 	ld hl, GFName
-.notMew
+.notGiftMew
 	call CopyData
 	ld a, [wMonDataLocation]
 	and a
@@ -52,14 +52,14 @@ _AddPartyMon::
 	ldh a, [hNewPartyLength]
 	dec a
 	call SkipFixedLengthTextEntries
-	ld a, [wCurPartySpecies]
-	cp MEW
-	jr z, .isMew
+	ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
+	jr z, .isGiftMew
 	ld a, NAME_MON_SCREEN
 	ld [wNamingScreenType], a
 	predef AskName
 	jr .skipNaming
-.isMew
+.isGiftMew
 	push hl
 	ld a, [wCurPartySpecies]
 	ld [wNamedObjectIndex], a
@@ -129,14 +129,14 @@ _AddPartyMon::
 	jr nz, .copyEnemyMonData
 
 ; Not wild.
-	ld a, [wCurPartySpecies]
-	cp MEW
-	jr z, .MewIVs
+	ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
+	jr z, .giftMewIVs
 	call Random ; generate random IVs
 	ld b, a
 	call Random
 	jr .next4
-.MewIVs
+.giftMewIVs
     ld a, $FF ; Mew gets fixed perfect IVs
 	ld b, $FF
 
@@ -224,9 +224,9 @@ _AddPartyMon::
 	predef WriteMonMoves
 	pop de
 
-    ld a, [wCurPartySpecies]
-	cp MEW
-	jr z, .mewID
+    ld a, [wCurMap]
+	cp CELADON_MANSION_3F ; gift Mew
+	jr z, .giftMewID
 	ld a, [wPlayerID]  ; set trainer ID to player ID
 	inc de
 	ld [de], a
@@ -234,7 +234,7 @@ _AddPartyMon::
 	inc de
 	ld [de], a
 	jr .endID
-.mewID
+.giftMewID
 	ld a, $59
 	inc de
 	ld [de], a
