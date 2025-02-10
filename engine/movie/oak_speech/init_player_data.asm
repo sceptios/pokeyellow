@@ -46,6 +46,12 @@ DEF START_MONEY EQU $3000
 	ld [hli], a
 	ld [hl], a
 
+	ld a, BANK(sRecievedMewFlag)
+	call OpenSRAM
+	xor a
+	ld [sRecievedMewFlag], a
+	call CloseSRAM
+
 	ld hl, wGameProgressFlags
 	ld bc, wGameProgressFlagsEnd - wGameProgressFlags
 	call FillMemory ; clear all game progress flags
